@@ -8,6 +8,7 @@ import t2t.nlevel as nl
 import t2t.util as ut
 import t2t.remap as rmap
 import t2t.consistency as con
+import t2t.mark_ranks as mr
 import t2t.cli as t2tcli
 
 
@@ -55,7 +56,7 @@ def decorate(tree, consensus_map, output):
 
     nl.set_preliminary_name_and_rank(tree_)
 
-    contree, contree_lookup = nl.make_consensus_tree(tipname_map.values())
+    _contree, contree_lookup = nl.make_consensus_tree(tipname_map.values())
     nl.backfill_names_gap(tree_, contree_lookup)
     nl.commonname_promotion(tree_)
     nl.make_names_unique(tree_)
@@ -116,6 +117,7 @@ def fetch(tree, output):
     else:
         output.write('\n'.join(result))
 
+
 @cli.command()
 @click.option('--taxonomy', '-t', required=True, help='Input tree',
               type=click.File('U'))
@@ -126,11 +128,12 @@ def fetch(tree, output):
 def validate(taxonomy, limit, flat_errors, hierarchy_errors):
     """Validate a taxonomy"""
     lines = taxonomy.readlines()
-    result, err = t2t.cli.validate(lines, limit, flat_errors, hierarchy_errors)
+    result, _err = t2t.cli.validate(lines, limit, flat_errors, hierarchy_errors)
 
     print '\n'.join(result)
 
     print 'Validation complete.'
+
 
 @cli.command()
 @click.option('--consensus-map', '-m', required=True,
@@ -169,6 +172,16 @@ def consistency(tree, consensus_map, output_file, rooted, quiet):
     if not quiet:
         print 'Consistency written to: ' + output_file
 
+
+@cli.command()
+@click.option('--tree', '-t', required=True, help='Input tree',
+              type=click.File('U'))
+@click.option('--output', '-o', required=True, help='Output tree',
+              type=click.File('w'))
+def ranks(tree, output):
+    """Mark internal nodes with predicted taxonomic rank"""
+    m = mr.MarkRanks()
+    m.mark(tree, output)
 
 if __name__ == '__main__':
     cli()
