@@ -23,6 +23,7 @@ from t2t.consistency import Consistency
 
 from io import StringIO
 
+
 class ConsistencyTests(TestCase):
 
     def setUp(self):
@@ -49,7 +50,7 @@ class ConsistencyTests(TestCase):
         nl.decorate_name_counts(tree)
 
         # determine taxonomic consistency of rooted tree
-        #expected_consistency_index
+        # expected_consistency_index
         c = Consistency(counts, len(nl.RANK_ORDER))
         consistency_index = c.calculate(tree, rooted=True)
 
@@ -58,7 +59,7 @@ class ConsistencyTests(TestCase):
         self.assertAlmostEqual(consistency_index[1]['g__Lachnospira'], 1.0)
         self.assertAlmostEqual(consistency_index[2]['s__Bacteroides pectinophilus'], 1.0)
 
-        #determine consistency of unrooted tree
+        # determine consistency of unrooted tree
         consistency_index = c.calculate(tree, rooted=False)
 
         self.assertAlmostEqual(consistency_index[0]['f__Lachnospiraceae'], 1.0)
@@ -84,7 +85,7 @@ class ConsistencyTests(TestCase):
         nl.decorate_name_counts(tree)
 
         # determine taxonomic consistency of rooted tree
-        #expected_consistency_index
+        # expected_consistency_index
         c = Consistency(counts, len(nl.RANK_ORDER))
         consistency_index = c.calculate(tree, rooted=True)
 
@@ -93,7 +94,7 @@ class ConsistencyTests(TestCase):
         self.assertAlmostEqual(consistency_index[2]['s__Bacteroides pectinophilus'], 0.66666666)
         self.assertAlmostEqual(consistency_index[2]['s__Bacteroides acidifaciens'], 1.0)
 
-        #determine consistency of unrooted tree
+        # determine consistency of unrooted tree
         consistency_index = c.calculate(tree, rooted=False)
 
         self.assertAlmostEqual(consistency_index[0]['f__Lachnospiraceae'], 1.0)

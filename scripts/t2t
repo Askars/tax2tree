@@ -176,12 +176,20 @@ def consistency(tree, consensus_map, output_file, rooted, quiet):
 @cli.command()
 @click.option('--tree', '-t', required=True, help='Input tree',
               type=click.File('U'))
+@click.option('--start-labels', '-s', required=True, multiple=True,
+              help='Label(s) of starting nodes.')
 @click.option('--output', '-o', required=True, help='Output tree',
               type=click.File('w'))
-def ranks(tree, output):
+@click.option('--start-rank', '-r', required=False, default=0,
+              help='Starting rank (0=domain, ..., 7=species).')
+@click.option('--verbose', is_flag=True, default=False, help='Provide detailed output')
+def ranks(tree, start_labels, output, start_rank, verbose):
     """Mark internal nodes with predicted taxonomic rank"""
     m = mr.MarkRanks()
-    m.mark(tree, output)
+    m.mark(tree, start_labels, start_rank, output)
+
+    if verbose:
+        print 'Tree with marked taxonomic ranks written to: ' + output
 
 if __name__ == '__main__':
     cli()

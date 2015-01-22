@@ -60,7 +60,7 @@ def check_prefixes(parsed, expected_prefixes):
     """Make sure each rank has the expected prefix"""
     for name, prefix in zip(parsed, expected_prefixes):
         try:
-            obs, level_name = name.split('__', 1)
+            obs, _level_name = name.split('__', 1)
         except ValueError:
             return False
 
@@ -82,7 +82,7 @@ def cache_tipnames(t):
 def get_polyphyletic(cons):
     """get polyphyletic groups and a representative tip"""
     tips, taxonstrings = unzip(cons.items())
-    tree, lookup = make_consensus_tree(taxonstrings, False, tips=tips)
+    tree, _lookup = make_consensus_tree(taxonstrings, False, tips=tips)
     cache_tipnames(tree)
 
     names = {}
