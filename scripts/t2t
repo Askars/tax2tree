@@ -185,10 +185,12 @@ def consistency(tree, consensus_map, output_file, rooted, verbose):
 def ranks(tree, start_labels, output, start_rank, verbose):
     """Mark internal nodes with predicted taxonomic rank"""
     m = mr.MarkRanks()
-    m.mark(tree, start_labels, start_rank, output)
+    root = m.mark(tree, start_labels, start_rank, verbose)
+
+    root.write(output)
 
     if verbose:
-        print 'Tree with marked taxonomic ranks written to: ' + output
+        click.echo('Tree with marked taxonomic ranks written to: ' + output.name)
 
 if __name__ == '__main__':
     cli()
