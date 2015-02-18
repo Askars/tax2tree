@@ -181,11 +181,19 @@ def consistency(tree, consensus_map, output_file, rooted, verbose):
               type=click.File('w'))
 @click.option('--start-rank', '-r', required=False, default=0,
               help='Starting rank (0=domain, ..., 7=species).')
+@click.option('--min-support', '-m', required=False, default=90,
+              help='Minimum required support to mark node')
+@click.option('--consistency-table', '-c', required=False, default=None,
+              help='Table of labeled ranks versus predicted ranks',
+              type=click.File('w'))
 @click.option('--verbose', is_flag=True, default=False, help='Provide detailed output')
-def ranks(tree, start_labels, output, start_rank, verbose):
+def ranks(tree, start_labels, output, start_rank, min_support, consistency_table, verbose):
     """Mark internal nodes with predicted taxonomic rank"""
     m = mr.MarkRanks()
-    root = m.mark(tree, start_labels, start_rank, verbose)
+    root = m.mark(tree, start_labels, start_rank, min_support, verbose)
+
+    if consistency_table:
+        m.write_consistency(consistency_table, root)
 
     root.write(output)
 
